@@ -1,0 +1,47 @@
+# Ignore system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Ignore vendor and dependencies
+/vendor/
+/node_modules/
+/composer.lock
+/package-lock.json
+
+# Ignore environment and logs
+.env
+.env.*
+storage/
+logs/
+*.log
+*.cache
+
+# Ignore build artifacts
+/public/storage
+/public/hot
+/public/mix-manifest.json
+/public/js/*.map
+/public/css/*.map
+
+# Ignore PHPUnit test artifacts
+/phpunit.xml
+/phpunit.xml.dist
+/tests/_output/
+/tests/_support/_generated/
+/coverage/
+/coverage.xml
+
+# Ignore compiled files
+/bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
+# Ignore IDE/project-specific files
+/.phpunit.result.cache
+/.phpstorm.meta.php
+
+# Ignore compiled class cache
+/.phpunit.result.cache
