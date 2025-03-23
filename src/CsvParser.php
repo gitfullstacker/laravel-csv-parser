@@ -15,8 +15,10 @@ class CsvParser
 
         $csv = Reader::createFromPath($filePath, 'r');
         $csv->setDelimiter($delimiter);
-        $csv->setHeaderOffset(0);
+        $csv->setHeaderOffset(0); // 👈 Important: use the first row as headers
 
-        return collect(iterator_to_array($csv->getRecords()));
+        $records = iterator_to_array($csv->getRecords());
+
+        return collect($records);
     }
 }
