@@ -1,37 +1,43 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use GitFullStacker\CsvParser\CsvParser;
+use PHPUnit\Framework\TestCase;
 
 class CsvParserTest extends TestCase
 {
-    public function testParsesCsvFileIntoCollection()
+    /** @test */
+    public function it_parses_csv_with_semicolon_delimiter_correctly()
     {
+        // Prepare sample CSV content with semicolon delimiter
         $csvContent = <<<CSV
-name,email
-John Doe,john@example.com
-Jane Smith,jane@example.com
+Sede;Nome sede;Aperte
+AG01;AGRIGENTO;0
+RM02;ROMA;5
 CSV;
 
-        $tempFile = tempnam(sys_get_temp_dir(), 'csv');
-        file_put_contents($tempFile, $csvContent);
+        // Create a temp file
+        $tempPath = tempnam(sys_get_temp_dir(), 'csv');
+        file_put_contents($tempPath, $csvContent);
 
-        $result = CsvParser::parse($tempFile);
+        // Call the parser
+        $parsed = CsvParser::parse($tempPath, ';');
 
-        $this->assertInstanceOf(Illuminate\Support\Collection::class, $result);
-        $this->assertCount(2, $result);
+        // Assert parsed data
+        $this->assertCount(2, $parsed);
 
-        $first = $result->first();
-        var_dump($first);
-        $this->assertEquals('John Doe', $first['name']);
-        $this->assertEquals('john@example.com', $first['email']);
+        $this->assertEquals([
+            'Sede' => 'AG01',
+            'Nome sede' => 'AGRIGENTO',
+            'Aperte' => '0',
+        ], $parsed[0]);
 
-        unlink($tempFile);
-    }
+        $this->assertEquals([
+            'Sede' => 'RM02',
+            'Nome sede' => 'ROMA',
+            'Aperte' => '5',
+        ], $parsed[1]);
 
-    public function testThrowsExceptionIfFileNotFound()
-    {
-        $this->expectException(Exception::class);
-        CsvParser::parse('/invalid/path/to/file.csv');
+        // Clean up
+        unlink($tempPath);
     }
 }

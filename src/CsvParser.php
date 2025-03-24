@@ -7,18 +7,26 @@ use League\Csv\Reader;
 
 class CsvParser
 {
-    public static function parse(string $filePath, string $delimiter = ','): Collection
+    public static function parse($path, $delimiter = ';')
     {
-        if (!file_exists($filePath)) {
-            throw new \Exception("CSV file not found: " . $filePath);
+        $rows = [];
+
+        if (!file_exists($path) || !is_readable($path)) {
+            return $rows;
         }
 
-        $csv = Reader::createFromPath($filePath, 'r');
-        $csv->setDelimiter($delimiter);
-        $csv->setHeaderOffset(0); // 👈 Important: use the first row as headers
+        if (($handle = fopen($path, 'r')) !== false) {
+            $headers = fgetcsv($handle, 0, $delimiter, '"', '\\');
 
-        $records = iterator_to_array($csv->getRecords());
+            while (($data = fgetcsv($handle, 0, $delimiter, '"', '\\')) !== false) {
+                if (count($data) === count($headers)) {
+                    $rows[] = array_combine($headers, $data);
+                }
+            }
 
-        return collect($records);
+            fclose($handle);
+        }
+
+        return $rows;
     }
 }
