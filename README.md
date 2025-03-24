@@ -21,7 +21,7 @@ A simple and efficient Laravel package for parsing CSV files using **league/csv*
 
 You can install the package via Composer:
 
-```sh
+```php
 composer require gitfullstacker/laravel-csv-parser
 ```
 
@@ -33,23 +33,23 @@ Laravel will automatically discover the service provider. No additional configur
 
 ### Parsing a CSV File
 
-```sh
+```php
 use GitFullStacker\CsvParser\Facades\CsvParser;
 
 $csvData = CsvParser::parse(storage_path('data.csv'));
 
-dd($csvData); // Outputs Laravel Collection
+dd($csvData); // Returns Illuminate\Support\Collection of CSV rows
 ```
 
 ### Using a Custom Delimiter
 
-```sh
+```php
 $csvData = CsvParser::parse(storage_path('semicolon-separated.csv'), ';');
 ```
 
 ### Handling Errors
 
-```sh
+```php
 try {
     $csvData = CsvParser::parse(storage_path('missing.csv'));
 } catch (\Exception $e) {
@@ -63,7 +63,7 @@ try {
 
 If you need to manually register the service provider, add the following in config/app.php:
 
-```sh
+```php
 'providers' => [
     GitFullStacker\CsvParser\CsvParserServiceProvider::class,
 ],
@@ -78,10 +78,18 @@ If you need to manually register the service provider, add the following in conf
 
 To run tests, install dependencies and execute PHPUnit:
 
-```sh
+```php
 composer install
 vendor/bin/phpunit
 ```
+
+---
+
+## 🧰 Requirements
+
+- PHP 7.4 or higher  
+- Laravel 8, 9, or 10  
+- league/csv 9.x
 
 ---
 
